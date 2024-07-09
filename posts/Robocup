@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Galio.Jin">
+
+
+    <meta name="subtitle" content="i=++i">
+
+
+
+
+<title>RobocupSSL Guideline | Blog</title>
+
+
+
+    <link rel="icon" href="/robot.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Galio&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Galio&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">RobocupSSL Guideline</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Galio.Jin</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 9, 2024&nbsp;&nbsp;15:52:56</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Guiline/">Guiline</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="This-Guide-Is-All-You-Need"><a href="#This-Guide-Is-All-You-Need" class="headerlink" title="This Guide Is All You Need"></a>This Guide Is All You Need</h1><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">竞赛官方qq群：540967785</span><br><span class="line">金足印象qq群：733053456</span><br></pre></td></tr></table></figure>
+
+<h2 id="Directory"><a href="#Directory" class="headerlink" title="Directory"></a>Directory</h2><p>[TOC]</p>
+<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p>​	本文档参考了SJTU和ZJU两所高校的一些资料进行编写，这是一个不完全的指南文档，有兴趣的可以进行扩写和更新。</p>
+<p>​	今年规则发生了一些改动，积分赛规则改为两次传球，国赛队伍进行3V3排名赛。</p>
+<hr>
+<h2 id="Lesson1-Introduction"><a href="#Lesson1-Introduction" class="headerlink" title="Lesson1 Introduction"></a>Lesson1 Introduction</h2><h3 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h3><ul>
+<li><input disabled="" type="checkbox"> 了解比赛相关的基本知识和</li>
+<li><input disabled="" type="checkbox"> 学会查找开源资料</li>
+<li><input disabled="" type="checkbox"> 学会阅读内部资料</li>
+</ul>
+<h3 id="1-了解RoboCup与SSL（Small-Size-League）"><a href="#1-了解RoboCup与SSL（Small-Size-League）" class="headerlink" title="1.了解RoboCup与SSL（Small Size League）"></a>1.了解RoboCup与SSL（Small Size League）</h3><p><strong>RoboCup is a competition domain designed to advance robotics and AI research through a friendly competition.</strong> </p>
+<p>RoboCup is an annual international robotics competition proposed and founded in 1996 (Pre-RoboCup) by a group of university professors (among which Hiroaki Kitano, Manuela M. Veloso, and Minoru Asada). The aim of such a competition consists of promoting robotics and AI research, by offering a publicly appealing, but formidable challenge.</p>
+<p><strong>Small Size robot soccer is one of the RoboCup league divisions.</strong> </p>
+<p>Small Size robot soccer, or F180 as it is otherwise known, focuses on the problem of intelligent multi-agent cooperation and control in a highly dynamic environment with a hybrid centralized&#x2F;distributed system.</p>
+<h3 id="2-SSL系统架构"><a href="#2-SSL系统架构" class="headerlink" title="2.SSL系统架构"></a>2.SSL系统架构</h3><p><strong>系统架构</strong></p>
+<p><img src="https://src-ssl.github.io/assets/RoboRun.png" alt="RoboRun"></p>
+<p>通过SSL-Version共享视觉系统，使裁判机(SOM)接收信息，裁判机对场上机器人(Agent)发出指令(Play)，机器人在对应状态机内执行各自的动作(Skill)</p>
+<img src="https://src-ssl.github.io/assets/Global.png" alt="Global" style="zoom: 67%;" />
+
+<p>策略机与机器人通信：</p>
+<p><img src="https://src-ssl.github.io/assets/Communication.gif" alt="Communication"></p>
+<p>Skill&amp;Agent：</p>
+<p><img src="https://src-ssl.github.io/assets/Skill&Agent.gif" alt="Skill&amp;Agent"></p>
+<p><strong>SSL策略框架</strong></p>
+<img src="https://src-ssl.github.io/assets/structure.PNG" alt="structure" style="zoom: 67%;" />
+
+<p> <strong>整个结构是分层的，策略层大概可以这样分层：</strong></p>
+<ol>
+<li>顶层是PlayBook，负责根据场上情况来选择合适的战术。其中使用了贝叶斯方法（recursive Bayesian estimation） 来评估场上情况；</li>
+<li>第二层是Play,存储着制定好的各种战术，包括各种定位球战术，运动战战术。每一个战术都是一个状态机，会根据不同的状态做出不同的动作， 满足条件时会跳出。每一个状态内部都定义了每一台机器人的行为，不过也可以选择让机器人维持之前的状态，每个状态内部还定义了机器人的角色匹配规则，在 执行这个战术（即PlayBook选择这个战术）时会根据状态内部的规则进行角色匹配。这一层主要用Lua实现；</li>
+<li>第三层是Agent,在程序中代表执行动作的个体，也就是一台机器人，Play层的战术会分配给每一个机器人去分别执行。 执行战术的人选是在Play层就定好了的，在这一层将动作分配给每一个个体，个体执行分配到的任务，也就是执行SKill层的一个个动作；</li>
+<li>第四层是SKill,一个SKill只定义一个机器人的动作，比如射门、传球。这一层提供各种战术动作给Play层，完成战术布置。 在这一层内部也有从简单到复杂的层级结构，最基本的SKill（动作）只有跑到一个固定点固定朝向和踢球，复杂的动作比如追踢是由调用简单的底层动作实现的。 这一层主要用C++实现；</li>
+</ol>
+<p>除了策略部分之外还有一个World Model，维护着环境信息，类似于openAI gym中的environment。这个部分将摄像头和机器人身上的传感器收集到的数据暴露给 策略部分中的各个层级，为它们提供信息。这一部分有Lua和C++的接口。</p>
+<h3 id="3-掌握简单的入门知识"><a href="#3-掌握简单的入门知识" class="headerlink" title="3.掌握简单的入门知识"></a>3.掌握简单的入门知识</h3><blockquote>
+<p>About Robocup：<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/RoboCup">https://en.wikipedia.org/wiki/RoboCup</a><br>About SmallSizeLeague：<a target="_blank" rel="noopener" href="http://wiki.robocup.org/Small_Size_League">http://wiki.robocup.org/Small_Size_League</a><br>RoboCup official website：<a target="_blank" rel="noopener" href="http://www.robocup.org/">http://www.robocup.org/</a></p>
+</blockquote>
+<h3 id="4-软件下载与配置"><a href="#4-软件下载与配置" class="headerlink" title="4.软件下载与配置"></a>4.软件下载与配置</h3><table>
+<thead>
+<tr>
+<th>软件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VisualStudio2013</td>
+<td>编写cpp</td>
+</tr>
+<tr>
+<td>Sublime（任一合适编辑器都可，用于Lua脚本编写）</td>
+<td>编写lua</td>
+</tr>
+<tr>
+<td>Typora（或在VisualStudio Code中配置markdown插件）</td>
+<td>编写markdown文档</td>
+</tr>
+<tr>
+<td>Version（裁判机视觉软件）</td>
+<td>视觉调试</td>
+</tr>
+<tr>
+<td>SOM v3.4.2</td>
+<td>脚本调试</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>基本软件配置参考csdn或b站教程，编写配置参考官方文档</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>文档</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SOM-V3.4用户手册</td>
+<td>SOM软件配置和使用</td>
+</tr>
+<tr>
+<td>SOM v3.4二次开发手册</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>机器人控制编程</td>
+<td>Lua、Cpp基础编写和文件配置教程（含官方函数注释）</td>
+</tr>
+<tr>
+<td>iLoboke I 足球机器人用户手册</td>
+<td>机器人和系统架构详解</td>
+</tr>
+<tr>
+<td>iLobike足球机器人比赛(4V4)</td>
+<td>规则详解</td>
+</tr>
+<tr>
+<td>SOM-V3.1官方task函数源码包</td>
+<td>官方cpp示例文件</td>
+</tr>
+</tbody></table>
+<p>&#x3D;&#x3D;<strong>竞赛官方视频号（很重要）：</strong><a target="_blank" rel="noopener" href="https://space.bilibili.com/1522123732/video?tid=0&pn=4&keyword=&order=pubdate">创非凡机器人投稿视频-创非凡机器人视频分享-哔哩哔哩视频 (bilibili.com)</a>&#x3D;&#x3D;</p>
+<hr>
+<h2 id="Lesson2-Hello-Lua"><a href="#Lesson2-Hello-Lua" class="headerlink" title="Lesson2 Hello,Lua"></a>Lesson2 Hello,Lua</h2><h3 id="Target-1"><a href="#Target-1" class="headerlink" title="Target"></a>Target</h3><ul>
+<li><input disabled="" type="checkbox"> 了解SOM文件夹中Lua脚本之间的联系、结构、分类</li>
+<li><input disabled="" type="checkbox"> 学会编写基本的Lua脚本</li>
+<li><input disabled="" type="checkbox"> 编写一个自己的脚本导入SOM进行调试</li>
+<li><input disabled="" type="checkbox"> 了解状态机和元表(table-driving)</li>
+</ul>
+<h3 id="了解Lua语言"><a href="#了解Lua语言" class="headerlink" title="了解Lua语言"></a>了解Lua语言</h3><p>​	Lua 是一个小巧的脚本语言，其设计目的是为了嵌入应用程序中，从而为应用程序提供灵活的扩展和定制功能。Lua由标准C编写而成，几乎在所有操作系统和平台上都可以编译，运行。Lua并没有提供强大的库，这是由它的定位决定的。所以Lua不适合作为开发独立应用程序的语言。</p>
+<p>​	Lua有一个同时进行的JIT项目，提供在特定平台上的即时编译功能。Lua脚本可以很容易的被C&#x2F;C++代码调用，也可以反过来调用C&#x2F;C++的函数，这使得Lua在应用程序中可以被广泛应用。不仅仅作为扩展脚本，也可以作为普通的配置文件，代替XML,ini等文件格式，并且更容易理解和维护。</p>
+<p>​	Lua由标准C编写而成，代码简洁优美，几乎在所有操作系统和平台上都可以编译，运行。 一个完整的Lua解释器不过200k，在目前所有脚本引擎中，Lua的速度是最快的。这一切都决定了Lua是作为嵌入式脚本的最佳选择。</p>
+<blockquote>
+<p>参考wiki：<a target="_blank" rel="noopener" href="https://wiki.luatos.com/">LuatOS 文档</a></p>
+<p>Lua基础教程：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1vf4y1L7Rb/?spm_id_from=333.337.search-card.all.click">【无废话30分钟】Lua快速入门教程 - 4K超清_哔哩哔哩_bilibili</a></p>
+<p>具体写法：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1V34y1a7Wv/?spm_id_from=333.999.0.0&vd_source=205cf1d327380b297c63b7faf4763c71">足球机器人软件培训（修改lua脚本）_哔哩哔哩_bilibili</a></p>
+</blockquote>
+<h3 id="A-Guide-to-Lua-Scripts"><a href="#A-Guide-to-Lua-Scripts" class="headerlink" title="A Guide to Lua_Scripts"></a>A Guide to Lua_Scripts</h3><blockquote>
+<p>最常改动的lua脚本位于目录：…\SOM\Team\lua_scripts</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">FolderName</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">opponent</td>
+<td align="center">针对世界强队和特殊情况的战术脚本</td>
+</tr>
+<tr>
+<td align="center">play</td>
+<td align="center">定位球（Ref）和普通（Nor）情况下的进攻（Kick）和防守（Def）的战术脚本</td>
+</tr>
+<tr>
+<td align="center">skill</td>
+<td align="center">具体动作的战术脚本</td>
+</tr>
+<tr>
+<td align="center">utils</td>
+<td align="center">工具类脚本</td>
+</tr>
+<tr>
+<td align="center">worldmodel</td>
+<td align="center">物理世界的反馈判断（Judge）</td>
+</tr>
+<tr>
+<td align="center">ZeusLua</td>
+<td align="center">未知</td>
+</tr>
+<tr>
+<td align="center">Config.lua</td>
+<td align="center">整场比赛的配置文件</td>
+</tr>
+<tr>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+</tbody></table>
+<p><strong>有限状态机(State Machine)</strong></p>
+<ol>
+<li>进入一个状态</li>
+<li>从World Model中获取信息，判断下一步进入哪个状态</li>
+<li>动作分配</li>
+<li>匹配规则</li>
+</ol>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 在实现中，每个状态都是一个Lua的table类型变量，</span></span><br><span class="line"><span class="comment">-- 包括switch，match，Kicker、Goalie（各个角色）这些键</span></span><br><span class="line">[<span class="string">&quot;run1&quot;</span>] = &#123;</span><br><span class="line">    <span class="comment">-- 状态的跳转函数</span></span><br><span class="line">    switch = <span class="function"><span class="keyword">function</span> <span class="params">()</span></span></span><br><span class="line">        <span class="comment">-- 从World Model中获取信息，判断下一步进入哪个状态</span></span><br><span class="line">        <span class="keyword">if</span> player.toTargetDist(<span class="string">&quot;Kicker&quot;</span>) &lt; <span class="number">20</span> <span class="keyword">then</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;run2&quot;</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span>,</span><br><span class="line">    <span class="comment">-- 分配任务，调用封装的SKill</span></span><br><span class="line">    Kicker = task.goCmuRush(TargetPos1, <span class="number">0</span>),</span><br><span class="line">    <span class="comment">-- 匹配规则，这样写就是不匹配</span></span><br><span class="line">    <span class="built_in">match</span> = <span class="string">&quot;&quot;</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参考：SOM包已有的脚本</p>
+</blockquote>
+<hr>
+<h2 id="Lesson3-Hello-Cpp"><a href="#Lesson3-Hello-Cpp" class="headerlink" title="Lesson3 Hello,Cpp"></a>Lesson3 Hello,Cpp</h2><h3 id="Target-2"><a href="#Target-2" class="headerlink" title="Target"></a>Target</h3><ul>
+<li><input disabled="" type="checkbox"> 看懂官方task函数源码包中的示例cpp文件</li>
+<li><input disabled="" type="checkbox"> 编写一个简单的射门或跑位skill</li>
+<li><input disabled="" type="checkbox"> 生成dll放置到SOM包对应路径，并在Lua脚本中调用</li>
+</ul>
+<h3 id="A-Guide-to-Cpp"><a href="#A-Guide-to-Cpp" class="headerlink" title="A Guide to Cpp"></a>A Guide to Cpp</h3><blockquote>
+<p>最常改动的dll文件位于目录：…\SOM\Team\user_skills</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>机器人控制编程</td>
+<td>Lua、Cpp基础编写和文件配置教程（含官方函数注释）</td>
+</tr>
+<tr>
+<td>SOM-V3.1官方task函数源码包</td>
+<td>官方cpp示例文件（Getball.cpp包含注释）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>压缩包内还附带了一些Cpp相关的优质书籍</p>
+</blockquote>
+<p>Cpp基本语法和C11特性本文档暂时不做解释，需要自学。</p>
+<p>重点对照示例代码，关注const、左值右值、类型转换、math库、vector库的使用</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span>_declspec(dllexport) <span class="function">PlayerTask <span class="title">player_plan</span><span class="params">(<span class="type">const</span> WorldModel* model, <span class="type">int</span> ...)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">PlayerTask <span class="title">player_plan</span><span class="params">(<span class="type">const</span> WorldModel* model, <span class="type">int</span> ...)</span></span>&#123;</span><br><span class="line">    PlayerTask task;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//函数接口</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vector2polar(ρ,θ)</td>
+<td>极坐标</td>
+</tr>
+<tr>
+<td>length()</td>
+<td>长度</td>
+</tr>
+<tr>
+<td>angle()</td>
+<td>角度</td>
+</tr>
+<tr>
+<td>point2f</td>
+<td>向量类型的变量声明</td>
+</tr>
+<tr>
+<td>const</td>
+<td>常量</td>
+</tr>
+<tr>
+<td>target_pos</td>
+<td>目标点</td>
+</tr>
+<tr>
+<td>orientate</td>
+<td>机器人朝向</td>
+</tr>
+<tr>
+<td>needCb</td>
+<td>吸球开关</td>
+</tr>
+<tr>
+<td>isKick</td>
+<td>踢球开关</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="Lesson4-Miscellaneous"><a href="#Lesson4-Miscellaneous" class="headerlink" title="Lesson4 Miscellaneous"></a>Lesson4 Miscellaneous</h2><h3 id="Software-Tool"><a href="#Software-Tool" class="headerlink" title="Software Tool"></a>Software Tool</h3><table>
+<thead>
+<tr>
+<th>必需</th>
+<th>非必需</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>git&#x2F;github</td>
+<td>cmake</td>
+</tr>
+<tr>
+<td>markdown语法</td>
+<td>路径规划相关的Cpp算法</td>
+</tr>
+</tbody></table>
+<h3 id="Hardware-Tool"><a href="#Hardware-Tool" class="headerlink" title="Hardware Tool"></a>Hardware Tool</h3><table>
+<thead>
+<tr>
+<th>工具清单</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>电工胶带</td>
+<td>机器人外壳防漏光</td>
+</tr>
+</tbody></table>
+<h3 id="Matters-Needing-Attention"><a href="#Matters-Needing-Attention" class="headerlink" title="Matters Needing Attention"></a>Matters Needing Attention</h3><p>在写C++之前需要在VS中 <strong>正确</strong> 配置对应worldmodel_lib.lib链接库文件，具体教程见官方文档及教程。</p>
+<p>重点：尽量提升代码的可读性和鲁棒性，避免冗杂和高耦合</p>
+<p><del>ps：仿真和实地测试的差距大概相当于你和你女神的距离，孩子</del></p>
+<hr>
+<h2 id="Some-Ideas"><a href="#Some-Ideas" class="headerlink" title="Some Ideas"></a>Some Ideas</h2><h3 id="技术挑战赛：面向调参的算法实现"><a href="#技术挑战赛：面向调参的算法实现" class="headerlink" title="技术挑战赛：面向调参的算法实现"></a>技术挑战赛：面向调参的算法实现</h3><p>通过Lua脚本调用C++编译生成的dll文件，构建决策树。</p>
+<blockquote>
+<p>在积分赛中，高稳定性和耗时短是最重要的，因此可以考虑一些奇淫技巧。例如提前量传球+最优延迟：</p>
+</blockquote>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&quot;passball&quot;</span>] = &#123;</span><br><span class="line">	switch = <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">		<span class="keyword">if</span> CBall2RoleDist(<span class="string">&quot;Kicker&quot;</span>)&gt;<span class="number">35</span> <span class="keyword">and</span> Cbuf_cnt(<span class="literal">true</span>,<span class="number">140</span>) <span class="keyword">then</span></span><br><span class="line">			<span class="keyword">return</span> <span class="string">&quot;receive&quot;</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span>,</span><br><span class="line">	Kicker   = task.KickerTask(<span class="string">&quot;passball2&quot;</span>),</span><br><span class="line">	Receiver = task.GotoPos(<span class="string">&quot;Receiver&quot;</span>,RobotPosX(<span class="string">&quot;Receiver&quot;</span>),RobotPosY(<span class="string">&quot;Receiver&quot;</span>),Receiver2Balldir()),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，这是种很唐的写法，不推荐大量使用Cbuf_cnt()</p>
+<h3 id="3V3对抗赛：面向边际问题的算法实现"><a href="#3V3对抗赛：面向边际问题的算法实现" class="headerlink" title="3V3对抗赛：面向边际问题的算法实现"></a>3V3对抗赛：面向边际问题的算法实现</h3><p>1.延续积分赛的写法，任务分配时加入goalie，最终在SOM战术包中选择脚本进行排列组合</p>
+<p>分析：单个脚本中进行整体状态分析和决策调用，Lua脚本较为冗长，有可能会导致屎山底层的task优先级异常高</p>
+<p>2.也可以尝试在单个脚本中通过dofile的方式进行多脚本调用 <del>（一个猜想，不一定对）</del></p>
+<blockquote>
+<p>伪代码示例：if …dofile(…)</p>
+</blockquote>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dofile</span>(<span class="string">&quot;./lua_scripts/opponent/&quot;</span>..json.OPPONENT_NAME..<span class="string">&quot;.lua&quot;</span>) ` </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">shitlang</span><span class="params">(name)</span></span></span><br><span class="line">    <span class="keyword">if</span> json.GO_WRITE_SHIT <span class="keyword">then</span></span><br><span class="line">	    <span class="keyword">if</span> name == <span class="string">&quot;someshit&quot;</span> <span class="keyword">then</span></span><br><span class="line">		    <span class="built_in">print</span>(<span class="string">&quot;This is a shit&quot;</span>)` </span><br><span class="line">            ... ...</span><br><span class="line">            <span class="built_in">dofile</span>(filename)</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">            ... ...</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="Other-Resources"><a href="#Other-Resources" class="headerlink" title="Other Resources"></a>Other Resources</h2><p>历届Robocup会议论文集（1997-2023）：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://link.springer.com/conference/robocup">https://link.springer.com/conference/robocup</a></li>
+</ol>
+<p>Robocup SSL(Small Soccer League)网站资源：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://ssl.robocup.org/scientific-publications/%EF%BC%88%E4%BC%98%E7%A7%80%E8%AE%BA%E6%96%87%E9%9B%86%EF%BC%89">https://ssl.robocup.org/scientific-publications/（优秀论文集）</a></li>
+<li><a target="_blank" rel="noopener" href="https://ssl.robocup.org/open-source-contributions/%EF%BC%88%E5%BC%80%E6%BA%90%E8%B5%84%E6%96%99%EF%BC%89">https://ssl.robocup.org/open-source-contributions/（开源资料）</a></li>
+</ol>
+<p>Rocos，另一家公司<br>（已知iLoboke源自浙大15年技术架构，该公司及相关学校技术架构大概在上交&#x2F;浙大17~18年水平）</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/Robocup-ssl-China%EF%BC%88Github%E4%B8%BB%E9%A1%B5%EF%BC%89">https://github.com/Robocup-ssl-China（Github主页）</a></li>
+<li><a target="_blank" rel="noopener" href="https://rvwy34k2yev.feishu.cn/wiki/X9ASwKfa9ilr8CkqzhcceyCynyc%EF%BC%88Rocos%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D%EF%BC%89">https://rvwy34k2yev.feishu.cn/wiki/X9ASwKfa9ilr8CkqzhcceyCynyc（Rocos平台介绍）</a></li>
+<li><a target="_blank" rel="noopener" href="https://rocos.readthedocs.io/zh-cn/latest/posts/2_rocos_advanced/2_2_0.html%EF%BC%88Rocos%E6%96%87%E6%A1%A3%EF%BC%89">https://rocos.readthedocs.io/zh-cn/latest/posts/2_rocos_advanced/2_2_0.html（Rocos文档）</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Robocup-ssl-China/rocos_stepbystep%EF%BC%88%E6%B5%99%E6%B1%9F%E7%9C%81%E5%90%84%E9%AB%98%E6%A0%A1%E6%8A%80%E6%9C%AF%E4%BA%A4%E6%B5%81%E4%BC%9A%E8%AE%AE%E8%AE%B0%E5%BD%95%EF%BC%89">https://github.com/Robocup-ssl-China/rocos_stepbystep（浙江省各高校技术交流会议记录）</a></li>
+</ol>
+<p>浙大Github全开源资料主页（包含主控板&#x2F;机械设计&#x2F;强化学习框架&#x2F;视觉处理器和GUI等）</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZJUNlict">https://github.com/ZJUNlict</a></li>
+</ol>
+<p>Robocup国际队伍开源资料（佐治亚理工）</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://rj-rc-software.readthedocs.io/en/latest/tutorial.html">https://rj-rc-software.readthedocs.io/en/latest/tutorial.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://robojackets.github.io/robocup-software/md_doc__documentation.html">https://robojackets.github.io/robocup-software/md_doc__documentation.html</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Galio.Jin</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://galio.top/posts/Robocup">https://galio.top/posts/Robocup</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>There is <strong>NOTHING</strong>.</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Robocup/"># Robocup</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Galio.Jin | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
